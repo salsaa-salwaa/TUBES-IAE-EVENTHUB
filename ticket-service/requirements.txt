@@ -1,0 +1,11 @@
+Flask==2.3.3
+Flask-GraphQL==2.0.1
+graphene==2.1.9
+Flask-SQLAlchemy==3.0.5
+pymysql==1.1.0
+python-dotenv==1.0.1
+cryptography
+flask-cors
+PyJWT
+requests
+requests

@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+graphene>=3.0
+sqlalchemy>=2.0
+pydantic
+python-dotenv
+aiosqlite
+requests
+greenlet
+cryptography
+graphene-sqlalchemy>=3.0.0b1
+promise
+python-jose[cryptography]

@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  ticket-service:
+    build: .
+    container_name: ticket-service
+    ports:
+      - "4002:4002"
+    env_file:
+      - .env
+    depends_on:
+      - ticket-db
+
+  ticket-db:
+    image: mysql:8.3
+    container_name: ticket-db
+    environment:
+      MYSQL_DATABASE: ticket_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
