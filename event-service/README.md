@@ -84,6 +84,7 @@ mutation {
       id
       title
       status
+      venueCapacity
     }
   }
 }
