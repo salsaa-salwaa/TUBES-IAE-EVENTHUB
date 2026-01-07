@@ -68,7 +68,8 @@ query {
 }
 ```
 
-### 3. Create Event (Admin Only)
+### 3. Create Event (Admin Only - Auto Sync Blocked Status)
+Membuat event baru dengan validasi ruangan ke SpaceMaster.
 ```graphql
 mutation {
   createEvent(
@@ -94,8 +95,8 @@ Mengubah detail event (Title & Description). **Jadwal tidak dapat diubah** demi 
 mutation {
   updateEvent(
     id: "<EVENT_ID>"
-    first_name: "John Update"
-    description: "Updated Description"
+    title: "NEW_TITLE"
+    description: "NEW_DESCRIPTION"
   ) {
     event {
       id
@@ -105,8 +106,6 @@ mutation {
   }
 }
 ```
-
-
 
 ### 6. Block Schedule (Manual Sync)
 ```graphql

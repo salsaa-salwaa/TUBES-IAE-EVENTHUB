@@ -96,10 +96,7 @@ Endpoint: `/event/graphql`
 | **Query** | `event(id: ID!)` | Mengambil detail satu event |
 | **Query** | `eventsByVenue(venueId: Int!)` | Mencari event berdasarkan venue |
 | **Mutation** | `createEvent` | Membuat event baru (Admin, Validasi SpaceMaster) |
-| **Mutation** | `updateEvent` | Mengubah detail atau jadwal event |
-
-| **Mutation** | `blockSchedule` | Mencegah booking ruangan secara manual (Sync SpaceMaster) |
-
+<<<<<<< HEAD
 #### Contoh: Create Event
 ```graphql
 mutation {
@@ -196,5 +193,4 @@ mutation {
 - **Event Service**: `http://localhost:8102`
 - **Booking Service**: `http://localhost:8001`
 
----
 
