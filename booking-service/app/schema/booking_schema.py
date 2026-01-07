@@ -219,21 +219,38 @@ async def create_booking(parent, info, input):
     mutation = CreateBooking()
     return await mutation.mutate(info, input)
 
-async def cancel_booking(parent, info, id):
-    session = info.context.get("db")
-    result = await session.execute(select(BookingModel).filter_by(id=id))
-    booking = result.scalars().first()
-    if not booking:
-        raise Exception(f"Booking with ID {id} not found")
-    
-    booking.status = StatusEnum.CANCELLED
-    await session.commit()
-    await session.refresh(booking)
-    return booking
+class CancelBooking(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+    message = graphene.String()
+    booking = graphene.Field(BookingType)
+
+    async def mutate(self, info, id):
+        user_role = info.context.get("user_role")
+        
+        if user_role != "ADMIN":
+             raise Exception("Unauthorized: Only Admin can cancel bookings")
+
+        session = info.context.get("db")
+        result = await session.execute(select(BookingModel).filter_by(id=id))
+        booking = result.scalars().first()
+        
+        if not booking:
+            return CancelBooking(success=False, message=f"Booking with ID {id} not found")
+
+        if booking.status == StatusEnum.PAID:
+            return CancelBooking(success=False, message="Cannot cancel a PAID booking", booking=booking)
+        
+        booking.status = StatusEnum.CANCELLED
+        await session.commit()
+        await session.refresh(booking)
+        return CancelBooking(success=True, message="Booking cancelled successfully", booking=booking)
 
 class Mutation(graphene.ObjectType):
     create_booking = CreateBooking.Field()
     confirm_payment = ConfirmPayment.Field()
-    cancel_booking = graphene.Field(BookingType, id=graphene.ID(required=True), resolver=cancel_booking)
+    cancel_booking = CancelBooking.Field()
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

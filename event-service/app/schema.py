@@ -175,13 +175,10 @@ class UpdateEvent(graphene.Mutation):
         id = ID(required=True)
         title = String()
         description = String()
-        start_time = String()
-        end_time = String()
-        status = String()
 
     event = graphene.Field(EventType)
 
-    def mutate(self, info, id, title=None, description=None, start_time=None, end_time=None, status=None):
+    def mutate(self, info, id, title=None, description=None):
         payload = get_token_payload(info)
 
         if payload.get("role") != "ADMIN":
@@ -204,84 +201,13 @@ class UpdateEvent(graphene.Mutation):
         if description is not None:
             event.description = description
 
-        if start_time is not None:
-            event.start_time = parse_datetime(start_time)
-
-        if end_time is not None:
-            event.end_time = parse_datetime(end_time)
-
-        if start_time or end_time:
-            if event.start_time >= event.end_time:
-                raise Exception("Start time must be before end time")
-        
-        if start_time or end_time:
-            from app.services.spacemaster_client import get_spacemaster_client
-            spacemaster = get_spacemaster_client()
-            
-            try:
-                spacemaster.validate_venue_and_room(
-                    venue_id=event.venue_id,
-                    room_id=event.room_id,
-                    start_time=event.start_time,
-                    end_time=event.end_time,
-                    exclude_event_id=id  # Exclude event ini sendiri dari pengecekan
-                )
-            except Exception as e:
-                raise Exception(f"SpaceMaster validation failed: {str(e)}")
-            
-            check_local_overlap(db, event.venue_id, event.room_id, event.start_time, event.end_time, exclude_id=id)
-
-        if status is not None:
-            if status not in VALID_EVENT_STATUSES:
-                raise Exception(f"Invalid status. Allowed: {VALID_EVENT_STATUSES}")
-            event.status = status
-
         db.commit()
         db.refresh(event)
-
-        if start_time or end_time:
-            try:
-                from app.services.spacemaster_client import get_spacemaster_client
-                spacemaster = get_spacemaster_client()
-                result = spacemaster.block_schedule(
-                    room_id=event.room_id,
-                    start_time=event.start_time,
-                    end_time=event.end_time
-                )
-                res_data = result.get("blockSchedule", {})
-                if not res_data.get("success"):
-                    pass
-            except Exception:
-                pass
 
         return UpdateEvent(event=event)
 
     
-class DeleteEvent(graphene.Mutation):
-    class Arguments:
-        id = ID(required=True)
 
-    success = graphene.Boolean()
-
-    def mutate(self, info, id):
-        payload = get_token_payload(info)
-        
-        if payload.get("role") != "ADMIN":
-            raise Exception("Only admin can delete event")
-
-        db = SessionLocal()
-
-        event = db.query(Event).filter(Event.id == id).first()
-        if not event:
-            raise Exception("Event not found")
-
-        if event.status == "ONGOING":
-            raise Exception("Ongoing event cannot be deleted")
-
-        db.delete(event)
-        db.commit()
-
-        return DeleteEvent(success=True)
 
 class BlockScheduleInput(graphene.InputObjectType):
     room_id = graphene.Int(required=True)
@@ -339,7 +265,6 @@ class BlockSchedule(graphene.Mutation):
 class Mutation(ObjectType):
     create_event = CreateEvent.Field()
     update_event = UpdateEvent.Field()
-    delete_event = DeleteEvent.Field()
     block_schedule = BlockSchedule.Field()
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

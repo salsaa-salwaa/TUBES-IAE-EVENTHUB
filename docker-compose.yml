@@ -4,7 +4,7 @@ services:
   api-gateway:
     build: ./api-gateway
     ports:
-      - "8090:8080"
+      - "8090:8000"
     environment:
       - BOOKING_SERVICE_URL=http://booking-service:8000
       - EVENT_SERVICE_URL=http://event-service:4001
@@ -39,7 +39,7 @@ services:
     environment:
       - DATABASE_URL=mysql+pymysql://root:root@event-db:3306/event_db
       - JWT_SECRET_KEY=dev-secret-123
-      - SPACEMASTER_GRAPHQL=https://9a9eec96465c.ngrok-free.app/graphql
+      - SPACEMASTER_GRAPHQL=https://7318c00bb235.ngrok-free.app/graphql
     depends_on:
       - event-db
     volumes:

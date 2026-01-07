@@ -28,6 +28,14 @@ python app/main.py
 
 ## 📝 API Usage
 
+> **PENTING:** Semua fitur di bawah ini membutuhkan **Header Authorization** (Login User/Admin).
+> Masukkan di tab **HEADERS**:
+> ```json
+> {
+>   "Authorization": "Bearer <ACCESS_TOKEN>"
+> }
+> ```
+
 ### 1. Create Booking
 Membuat pesanan baru. Status awal adalah `PENDING`.
 *Membutuhkan `eventId` dan `ticketTypeId` yang valid.*
@@ -57,13 +65,17 @@ mutation {
 }
 ```
 
-### 3. Cancel Booking
-Membatalkan pesanan.
+### 3. Cancel Booking (Admin Only)
+Membatalkan pesanan. **Hanya bisa dilakukan oleh Admin** dan **tidak bisa membatalkan pesanan yang sudah PAID**.
 ```graphql
 mutation {
   cancelBooking(id: "<BOOKING_ID>") {
-    id
-    status
+    success
+    message
+    booking {
+      id
+      status
+    }
   }
 }
 ```

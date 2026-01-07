@@ -1,8 +1,9 @@
 import os
 
+# SpaceMaster URL (Updated)
 SPACEMASTER_GRAPHQL = os.getenv(
     "SPACEMASTER_GRAPHQL",
-    "https://07098df7d936.ngrok-free.app/graphql"
+    "https://7318c00bb235.ngrok-free.app/graphql"
 )
 
 EVENT_STATUS_SCHEDULED = "SCHEDULED"
@@ -15,15 +16,4 @@ VALID_EVENT_STATUSES = [
     EVENT_STATUS_ONGOING,
     EVENT_STATUS_COMPLETED,
     EVENT_STATUS_CANCELLED
-]
-
-BOOKABLE_EVENT_STATUSES = [
-    EVENT_STATUS_SCHEDULED
-]
-
-REQUIRED_SPACEMASTER_FIELDS = [
-    "venue_id",
-    "room_id",
-    "start_time",
-    "end_time"
 ]

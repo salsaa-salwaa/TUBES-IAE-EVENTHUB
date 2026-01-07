@@ -32,7 +32,7 @@ MODERN_GRAPHIQL_HTML = """
         if (opts && opts.headers) {
           headers = Object.assign({}, headers, opts.headers);
         }
-        return fetch(window.location.origin + '/graphql', {
+        return fetch(window.location.href, {
           method: 'post',
           headers: headers,
           body: JSON.stringify(graphQLParams),

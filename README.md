@@ -61,8 +61,6 @@ Semua permintaan disarankan melalui **API Gateway** yang berjalan di port **`809
 
 ## Referensi API (GraphQL)
 
-Berikut adalah daftar lengkap operasi yang tersedia untuk setiap layanan.
-
 ### 1. User Service
 Endpoint: `/user/graphql`
 
@@ -99,7 +97,7 @@ Endpoint: `/event/graphql`
 | **Query** | `eventsByVenue(venueId: Int!)` | Mencari event berdasarkan venue |
 | **Mutation** | `createEvent` | Membuat event baru (Admin, Validasi SpaceMaster) |
 | **Mutation** | `updateEvent` | Mengubah detail atau jadwal event |
-| **Mutation** | `deleteEvent` | Menghapus event |
+
 | **Mutation** | `blockSchedule` | Mencegah booking ruangan secara manual (Sync SpaceMaster) |
 
 #### Contoh: Create Event
@@ -160,7 +158,7 @@ Endpoint: `/booking/graphql`
 | **Query** | `bookingsByUser(userId: ID!)` | Melihat history booking user |
 | **Mutation** | `createBooking` | Membuat pesanan baru (Status: PENDING) |
 | **Mutation** | `confirmPayment` | Konfirmasi pembayaran (Status: PAID) |
-| **Mutation** | `cancelBooking` | Membatalkan pesanan (Status: CANCELLED) |
+| **Mutation** | `cancelBooking` | Membatalkan pesanan (Admin Only, Returns Success/Message) |
 
 #### Contoh: Alur Pemesanan Lengkap
 **Langkah 1: Create Booking**
@@ -193,7 +191,6 @@ mutation {
 
 ## Akses Pengembangan (Direct Access)
 
-Jika Anda ingin mengakses layanan secara langsung tanpa melalui gateway (Debug only):
 - **User Service**: `http://localhost:8004`
 - **Ticket Service**: `http://localhost:8003`
 - **Event Service**: `http://localhost:8102`
@@ -201,33 +198,3 @@ Jika Anda ingin mengakses layanan secara langsung tanpa melalui gateway (Debug o
 
 ---
 
-## Event Status Workflow
-
-Event memiliki 4 status yang berbeda:
-- **SCHEDULED**: Event dijadwalkan dan **tiket dapat dipesan**.
-- **ONGOING**: Event sedang berlangsung (tiket tidak dapat dipesan).
-- **COMPLETED**: Event telah selesai.
-- **CANCELLED**: Event dibatalkan.
-
----
-
-## Troubleshooting
-
-### Token Authentication Error
-**Masalah**: "Invalid token" atau "Token expired".
-**Solusi**:
-1. Pastikan `JWT_SECRET_KEY` sama di semua service (`dev-secret-123`).
-2. Login ulang melalui User Service untuk dapat token baru.
-
-### Booking Gagal
-**Masalah**: "Event is not open for booking"
-**Solusi**: Cek status event, pastikan `SCHEDULED`. Gunakan query `event(id: ...)` untuk memeriksa.
-
-### SpaceMaster Sync Error
-**Masalah**: Gagal buat event karena validasi ruangan.
-**Solusi**: Pastikan `SPACEMASTER_GRAPHQL` URL di `docker-compose.yml` dapat diakses dan ruangan tersedia di jam tersebut.
-
----
-
-## Lisensi
-MIT License

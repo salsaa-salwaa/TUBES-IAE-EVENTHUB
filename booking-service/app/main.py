@@ -35,16 +35,20 @@ async def graphql_handler(request: Request, db: AsyncSession = Depends(get_db)):
 
     auth_header = request.headers.get("Authorization")
     user_id = None
+    user_role = None
     
     if auth_header and auth_header.startswith("Bearer "):
         token = auth_header.split(" ")[1]
         user_data = get_user_from_token(token)
         if user_data:
             user_id = user_data[0]
+            payload = user_data[1]
+            user_role = payload.get("role")
             
     context = {
         "db": db,
         "user_id": user_id,
+        "user_role": user_role,
         "request": request,
     }
     

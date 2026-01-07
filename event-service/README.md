@@ -69,7 +69,6 @@ query {
 ```
 
 ### 3. Create Event (Admin Only)
-Membuat event baru dengan validasi ruangan ke SpaceMaster.
 ```graphql
 mutation {
   createEvent(
@@ -90,35 +89,26 @@ mutation {
 ```
 
 ### 4. Update Event (Admin Only)
-Mengubah detail event atau jadwal (akan re-validasi SpaceMaster).
+Mengubah detail event (Title & Description). **Jadwal tidak dapat diubah** demi menjaga konsistensi dengan SpaceMaster.
 ```graphql
 mutation {
   updateEvent(
     id: "<EVENT_ID>"
-    title: "Updated Title"
-    status: "ONGOING"
+    first_name: "John Update"
+    description: "Updated Description"
   ) {
     event {
       id
       title
-      status
+      description
     }
   }
 }
 ```
 
-### 5. Delete Event (Admin Only)
-Menghapus event (hanya jika status bukan ONGOING).
-```graphql
-mutation {
-  deleteEvent(id: "<EVENT_ID>") {
-    success
-  }
-}
-```
+
 
 ### 6. Block Schedule (Manual Sync)
-Melakukan blocking ruangan manual ke SpaceMaster tanpa membuat Event lengkap.
 ```graphql
 mutation {
   blockSchedule(input: {

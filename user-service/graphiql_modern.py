@@ -29,7 +29,7 @@ MODERN_GRAPHIQL_HTML = """
         let headers = {
           'Content-Type': 'application/json',
         };
-        return fetch(window.location.origin + '/graphql', {
+        return fetch(window.location.href, {
           method: 'post',
           headers: headers,
           body: JSON.stringify(graphQLParams),
