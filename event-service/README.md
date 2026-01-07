@@ -67,7 +67,7 @@ query {
   }
 }
 ```
-### 2. Read Event by venueId
+### 3. Read Event by venueId
 ```graphql
 query {
   eventsByVenue(venueId: 1) {
@@ -83,7 +83,7 @@ query {
 }
 ```
 
-### 3. Create Event (Admin Only - Auto Sync Blocked Status)
+### 4. Create Event (Admin Only - Auto Sync Blocked Status)
 Membuat event baru dengan validasi ruangan ke SpaceMaster.
 ```graphql
 mutation {
@@ -105,7 +105,7 @@ mutation {
 }
 ```
 
-### 4. Update Event (Admin Only)
+### 5. Update Event (Admin Only)
 Mengubah detail event (Title & Description). **Jadwal tidak dapat diubah** demi menjaga konsistensi dengan SpaceMaster.
 ```graphql
 mutation {
