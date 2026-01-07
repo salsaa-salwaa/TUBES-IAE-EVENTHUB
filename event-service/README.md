@@ -67,6 +67,21 @@ query {
   }
 }
 ```
+### 2. Read Event by venueId
+```graphql
+query {
+  eventsByVenue(venueId: 1) {
+    id
+    title
+    description
+    startTime
+    endTime
+    venueCapacity
+    status
+    roomId
+  }
+}
+```
 
 ### 3. Create Event (Admin Only - Auto Sync Blocked Status)
 Membuat event baru dengan validasi ruangan ke SpaceMaster.
