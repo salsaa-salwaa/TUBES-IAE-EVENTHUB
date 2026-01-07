@@ -68,7 +68,7 @@ query {
 }
 ```
 
-### 3. Create Event (Admin Only)
+### 3. Create Event (Admin Only - Auto Sync Blocked Status)
 Membuat event baru dengan validasi ruangan ke SpaceMaster.
 ```graphql
 mutation {
@@ -94,40 +94,18 @@ Mengubah detail event atau jadwal (akan re-validasi SpaceMaster).
 ```graphql
 mutation {
   updateEvent(
-    id: "<EVENT_ID>"
-    title: "Updated Title"
-    status: "ONGOING"
+    id: "EVENT_ID",  
+    title: "NEW_TITLE",
+    description: "NEW_DESCRIPTION"
   ) {
     event {
       id
       title
+      description
+      startTime
+      endTime
       status
     }
-  }
-}
-```
-
-### 5. Delete Event (Admin Only)
-Menghapus event (hanya jika status bukan ONGOING).
-```graphql
-mutation {
-  deleteEvent(id: "<EVENT_ID>") {
-    success
-  }
-}
-```
-
-### 6. Block Schedule (Manual Sync)
-Melakukan blocking ruangan manual ke SpaceMaster tanpa membuat Event lengkap.
-```graphql
-mutation {
-  blockSchedule(input: {
-    roomId: 101
-    startTime: "2026-12-01T08:00:00"
-    endTime: "2026-12-01T12:00:00"
-  }) {
-    success
-    message
   }
 }
 ```
