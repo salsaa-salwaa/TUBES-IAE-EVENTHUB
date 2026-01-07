@@ -96,7 +96,7 @@ Endpoint: `/event/graphql`
 | **Query** | `event(id: ID!)` | Mengambil detail satu event |
 | **Query** | `eventsByVenue(venueId: Int!)` | Mencari event berdasarkan venue |
 | **Mutation** | `createEvent` | Membuat event baru (Admin, Validasi SpaceMaster) |
-<<<<<<< HEAD
+
 #### Contoh: Create Event
 ```graphql
 mutation {
